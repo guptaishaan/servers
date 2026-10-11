@@ -298,7 +298,7 @@ test("assembleNotes: packages, sections, trailer, ledger, known issues, thanks",
       knownIssues: ["K"],
       thanks: "## Thanks for helping us improve\n\nX",
     }),
-    "P\n\nS1\n\nS2\n\nT\n\nRelease ledger: [mb](https://l)\n\n## Known issue\n\nK\n\n## Thanks for helping us improve\n\nX\n",
+    "P\n\nRelease ledger: [mb](https://l)\n\nS1\n\nS2\n\nT\n\n## Known issue\n\nK\n\n## Thanks for helping us improve\n\nX\n",
   );
   assert.equal(
     assembleNotes({
@@ -521,6 +521,10 @@ test("notes: per-server sections, every PR placed, one release-wide Thanks", asy
     /\| `mcp-server-time` \| `2\.0\.0` \| PyPI \| unchanged \|/,
   );
   assert.doesNotMatch(notes, /^## mcp-server-time/m);
+  assert.match(
+    sectionOf(notes, "## Packages"),
+    /\|\n\nRelease ledger: \[v2\/chore\/1-release-v2\.0\.0\]\(https:\/\/l\.example\/x\)\n$/,
+  );
   assert.deepEqual(notes.match(/^## .*/gm), [
     "## Packages",
     "## @modelcontextprotocol/server-memory 1.0.0",
@@ -549,8 +553,6 @@ test("notes: per-server sections, every PR placed, one release-wide Thanks", asy
     notes.endsWith(
       [
         "**Full Changelog**: https://example/compare",
-        "",
-        "Release ledger: [v2/chore/1-release-v2.0.0](https://l.example/x)",
         "",
         "## Thanks for helping us improve",
         "",
