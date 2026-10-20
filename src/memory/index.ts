@@ -574,7 +574,7 @@ export class KnowledgeGraphManager {
         if (!entity) {
           throw new Error(`Entity with name ${o.entityName} not found`);
         }
-        const newObservations = o.contents.filter(
+        const newObservations = [...new Set(o.contents)].filter(
           (content) => !entity.observations.includes(content),
         );
         entity.observations.push(...newObservations);
