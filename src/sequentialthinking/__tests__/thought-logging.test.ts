@@ -149,6 +149,24 @@ describe("sequentialthinking thought logging", () => {
       expect(logged()).toEqual([box("💭 Thought 1/3", text)]);
     });
 
+    // #5205: each line of a multi-line thought is its own padded row, and the
+    // box is as wide as the longest line.
+    it("draws each line of a multi-line thought as its own row", async () => {
+      await conn!.think(
+        thought({ thought: "one\na much longer second line\n3" }),
+      );
+      expect(logged()).toEqual([
+        `
+┌─────────────────────────────┐
+│ 💭 Thought 1/3              │
+├─────────────────────────────┤
+│ one                         │
+│ a much longer second line   │
+│ 3                           │
+└─────────────────────────────┘`,
+      ]);
+    });
+
     it("logs nothing for a call rejected by the schema", async () => {
       await conn!.think(thought({ nextThoughtNeeded: "yes" }));
       expect(logged()).toEqual([]);

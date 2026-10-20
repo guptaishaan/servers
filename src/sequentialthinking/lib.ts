@@ -64,8 +64,9 @@ export class SequentialThinkingServer {
 
     const counts = ` ${thoughtNumber}/${totalThoughts}${context}`;
     const visibleHeader = `${label}${counts}`;
+    const lines = thought.split("\n");
     const border = "─".repeat(
-      Math.max(visibleHeader.length, thought.length) + 4,
+      Math.max(visibleHeader.length, ...lines.map((line) => line.length)) + 4,
     );
     // The header row is padded to the border's width like the thought row, by
     // the visible text's length. Each label's emoji is one surrogate pair, so
@@ -77,7 +78,7 @@ export class SequentialThinkingServer {
 ┌${border}┐
 │ ${header} │
 ├${border}┤
-│ ${thought.padEnd(border.length - 2)} │
+${lines.map((line) => `│ ${line.padEnd(border.length - 2)} │`).join("\n")}
 └${border}┘`;
   }
 
